@@ -16,24 +16,23 @@ export async function GET(req: NextRequest) {
   const rows = records.map(r => ({
     Fecha:      r.fecha,
     Tienda:     r.tienda,
-    Producto:   r.producto  || '',
-    Talla:      r.talla     || '',
-    Nombre:     r.nombre    || '',
-    Email:      r.email     || '',
-    Teléfono:   r.telefono  || '',
+    Producto:   r.producto   || '',
+    Modelo:     r.modelo     || '',
+    Color:      r.color      || '',
+    Talla:      r.talla      || '',
+    Nombre:     r.nombre     || '',
+    Email:      r.email      || '',
+    Teléfono:   r.telefono   || '',
     Comentario: r.comentario || '',
-    Insights:   r.insights  || '',
+    Insights:   r.insights   || '',
   }))
 
   const wb = XLSX.utils.book_new()
   const ws = XLSX.utils.json_to_sheet(rows)
-
-  // Column widths
   ws['!cols'] = [
-    { wch: 12 }, { wch: 18 }, { wch: 16 }, { wch: 8 },
+    { wch: 12 }, { wch: 18 }, { wch: 14 }, { wch: 14 }, { wch: 12 }, { wch: 8 },
     { wch: 20 }, { wch: 28 }, { wch: 14 }, { wch: 40 }, { wch: 50 },
   ]
-
   XLSX.utils.book_append_sheet(wb, ws, 'Ventas Perdidas')
   const buf = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
 
