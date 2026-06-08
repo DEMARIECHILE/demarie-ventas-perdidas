@@ -5,6 +5,6 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  deleteRecord(params.id)
+  await deleteRecord(params.id)
   return NextResponse.json({ ok: true })
 }

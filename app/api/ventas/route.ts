@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   const desde  = searchParams.get('desde')
   const hasta  = searchParams.get('hasta')
 
-  let records = readAll()
+  let records = await readAll()
   if (tienda && TIENDAS.includes(tienda)) records = records.filter(r => r.tienda === tienda)
   if (desde) records = records.filter(r => r.fecha >= desde)
   if (hasta) records = records.filter(r => r.fecha <= hasta)
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  const { tienda, nombre, email, telefono, producto, modelo, color, talla, comentario } = body
+  const { tienda, nombre, email, telefono, producto, modelo, talla, comentario } = body
 
   if (!tienda || !TIENDAS.includes(tienda)) {
     return NextResponse.json({ error: 'Tienda inválida' }, { status: 400 })
@@ -33,7 +33,6 @@ export async function POST(req: NextRequest) {
   const textToAnalyze = [
     producto   && `Producto: ${producto}`,
     modelo     && `Modelo: ${modelo}`,
-    color      && `Color: ${color}`,
     talla      && `Talla: ${talla}`,
     comentario && `Comentario: ${comentario}`,
   ].filter(Boolean).join('. ')
@@ -47,7 +46,7 @@ export async function POST(req: NextRequest) {
           role: 'user',
           content: `Eres asistente de una tienda de ropa íntima femenina llamada Demarie.
 Analiza este registro de venta perdida y extrae en 1-2 oraciones cortas los insights clave
-(qué producto, modelo, color, talla, patrón de demanda, acción recomendada). Sé conciso y directo.
+(qué producto, modelo, talla, patrón de demanda, acción recomendada). Sé conciso y directo.
 
 Registro: ${textToAnalyze}
 
@@ -69,13 +68,12 @@ Responde SOLO con el insight, sin introducción.`
     telefono:   telefono   || undefined,
     producto:   producto   || undefined,
     modelo:     modelo     || undefined,
-    color:      color      || undefined,
     talla:      talla      || undefined,
     comentario: comentario || undefined,
     insights,
     createdAt:  new Date().toISOString(),
   }
 
-  addRecord(record)
+  await addRecord(record)
   return NextResponse.json(record, { status: 201 })
 }

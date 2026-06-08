@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   const desde  = searchParams.get('desde')
   const hasta  = searchParams.get('hasta')
 
-  let records = readAll()
+  let records = await readAll()
   if (tienda && tienda !== 'Todas') records = records.filter(r => r.tienda === tienda)
   if (desde) records = records.filter(r => r.fecha >= desde)
   if (hasta) records = records.filter(r => r.fecha <= hasta)
@@ -16,9 +16,8 @@ export async function GET(req: NextRequest) {
   const rows = records.map(r => ({
     Fecha:      r.fecha,
     Tienda:     r.tienda,
-    Producto:   r.producto   || '',
+    Tipo:       r.producto   || '',
     Modelo:     r.modelo     || '',
-    Color:      r.color      || '',
     Talla:      r.talla      || '',
     Nombre:     r.nombre     || '',
     Email:      r.email      || '',
@@ -30,7 +29,7 @@ export async function GET(req: NextRequest) {
   const wb = XLSX.utils.book_new()
   const ws = XLSX.utils.json_to_sheet(rows)
   ws['!cols'] = [
-    { wch: 12 }, { wch: 18 }, { wch: 14 }, { wch: 14 }, { wch: 12 }, { wch: 8 },
+    { wch: 12 }, { wch: 18 }, { wch: 14 }, { wch: 14 }, { wch: 8 },
     { wch: 20 }, { wch: 28 }, { wch: 14 }, { wch: 40 }, { wch: 50 },
   ]
   XLSX.utils.book_append_sheet(wb, ws, 'Ventas Perdidas')

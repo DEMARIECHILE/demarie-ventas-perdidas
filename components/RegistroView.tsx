@@ -117,7 +117,7 @@ export default function RegistroView({ tienda, onBack, onDashboard }: Props) {
               type="text"
               value={form.modelo}
               onChange={e => update('modelo', e.target.value)}
-              placeholder='Ej: NALA, LUNA, SOFÍA...'
+              placeholder='Ej: NALA negro, LUNA beige, SOFÍA rosado...'
               className="mt-2 w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-300"
             />
           </div>
