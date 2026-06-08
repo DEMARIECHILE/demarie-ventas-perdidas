@@ -1,5 +1,5 @@
 import { VentaPerdida } from './types'
-import { put, get, del } from '@vercel/blob'
+import { put } from '@vercel/blob'
 
 const BLOB_KEY = 'ventas-perdidas/data.json'
 
