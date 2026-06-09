@@ -1,14 +1,14 @@
 import { VentaPerdida } from './types'
-import { put, list, getDownloadUrl } from '@vercel/blob'
+import { put, list } from '@vercel/blob'
 
-const BLOB_KEY = 'ventas-perdidas/data.json'
+const KEY = 'ventas-perdidas/data.json'
 
 export async function readAll(): Promise<VentaPerdida[]> {
   try {
     const { blobs } = await list({ prefix: 'ventas-perdidas/' })
-    const blob = blobs.find(b => b.pathname === BLOB_KEY)
+    const blob = blobs.find(b => b.pathname === KEY)
     if (!blob) return []
-    const res = await fetch(blob.downloadUrl)
+    const res = await fetch(blob.url)
     if (!res.ok) return []
     return await res.json()
   } catch {
@@ -17,7 +17,7 @@ export async function readAll(): Promise<VentaPerdida[]> {
 }
 
 async function writeAll(records: VentaPerdida[]) {
-  await put(BLOB_KEY, JSON.stringify(records), {
+  await put(KEY, JSON.stringify(records), {
     access: 'public',
     addRandomSuffix: false,
   })
