@@ -20,6 +20,7 @@ async function writeAll(records: VentaPerdida[]) {
   await put(KEY, JSON.stringify(records), {
     access: 'public',
     addRandomSuffix: false,
+    cacheControlMaxAge: 0,
   })
 }
 
