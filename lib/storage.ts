@@ -19,9 +19,8 @@ export async function readAll(): Promise<VentaPerdida[]> {
 async function writeAll(records: VentaPerdida[]) {
   await put(BLOB_KEY, JSON.stringify(records), {
     access: 'public',
-    allowOverwrite: true,
     token: process.env.BLOB_READ_WRITE_TOKEN,
-  })
+  } as Parameters<typeof put>[2])
 }
 
 export async function addRecord(record: VentaPerdida) {
